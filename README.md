@@ -1,0 +1,52 @@
+# Cor Multidisciplinary Project - Tiago Simulation
+
+<img src="https://img.shields.io/badge/ROS%20version-melodic-blue.svg"/>
+
+Welcome to the Multidisciplinary Project - Tiago Simulation repository! This repository aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally.
+
+**Important:** The only officially supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation.
+
+## Local
+
+Create a catkin workspace and clone all required dependencies listed in `cor_mdp_tiago.rosinstall`. To automate the process [vcstool](http://wiki.ros.org/vcstool) can be used:
+
+``` bash
+mkdir -p <my_catkin_ws>/src # if no catkin_ws yet
+cd <my_catkin_ws>/src
+vcs import --input cor_mdp_tiago.rosinstall .
+cd ..
+```
+
+Next, use rosdep to install other dependencies:
+``` bash
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src --rosdistro melodic -y --skip-keys="opencv2 opencv2-nonfree pal_laser_filters speed_limit_node sensor_to_cloud hokuyo_node libdw-dev python-graphitesend-pip python-statsd pal_filters pal_vo_server pal_usb_utils pal_pcl pal_pcl_points_throttle_and_filter pal_karto pal_local_joint_control camera_calibration_files pal_startup_msgs pal-orbbec-openni2 dummy_actuators_manager pal_local_planner gravity_compensation_controller current_limit_controller dynamic_footprint dynamixel_cpp tf_lookup opencv3 joint_impedance_trajectory_controller" 
+```
+> Note: the skip-keys contain non-essential dependencies and are taken from the official [PAL install instructions](http://wiki.ros.org/Robots/TIAGo%2B%2B/Tutorials/Installation/InstallUbuntuAndROS)
+
+Finally build and source the workspace:
+``` bash
+catkin build && source devel/setup.bash
+```
+
+## Quickstart
+
+When starting the simulation for the first time run the following bash script. This will add the correct gazebo paths to your .bashrc
+```
+roscd cor_mdp_tiago_gazebo
+source scripts/set_gazebo_env.sh
+```
+
+### Ahold project
+
+```
+roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_ahold
+```
+
+### Festo project
+
+```
+roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_festo
+```
+
