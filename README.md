@@ -51,7 +51,7 @@ roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_ahold
 ### Festo project
 
 ```
-roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_festo
+roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
 ```
 
 ## Marker Detection
