@@ -83,10 +83,10 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>3702 458000000</sim_time>
-      <real_time>732 27383835</real_time>
-      <wall_time>1650447672 904279388</wall_time>
-      <iterations>697975</iterations>
+      <sim_time>3811 960000000</sim_time>
+      <real_time>110 355298543</real_time>
+      <wall_time>1650448094 910989813</wall_time>
+      <iterations>109502</iterations>
       <model name='PublicCubicle'>
         <pose frame=''>5.24152 3.94124 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -232,7 +232,7 @@
         </link>
       </model>
       <model name='chair_1_clone'>
-        <pose frame=''>-4.67676 1.51424 0.85 0 0 -1.37464</pose>
+        <pose frame=''>-4.67675 1.51424 0.85 0 0 -1.37464</pose>
         <scale>1 1 1</scale>
         <link name='colision'>
           <pose frame=''>-4.69877 1.62503 0.7 0 0 -1.37464</pose>
@@ -632,53 +632,53 @@
         </link>
       </model>
       <model name='coffee_cup_tag36_11_00001'>
-        <pose frame=''>-4.98964 2.60824 1.08539 -8.8e-05 -3.7e-05 -1.55378</pose>
+        <pose frame=''>-4.98964 2.60824 1.08538 2.9e-05 5.3e-05 -1.55378</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>-4.98964 2.60824 1.08539 -8.8e-05 -3.7e-05 -1.55378</pose>
+          <pose frame=''>-4.98964 2.60824 1.08538 2.9e-05 5.3e-05 -1.55378</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0.000121 -5.7e-05 18.365 0.91907 -1.38379 6.4e-05</acceleration>
-          <wrench>-1.2e-05 -6e-06 1.8365 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -0.98 0 -0 0</wrench>
         </link>
       </model>
       <model name='coffee_cup_tag36_11_00002'>
-        <pose frame=''>-4.81365 2.61172 1.08539 -0.000143 -8.8e-05 -1.50463</pose>
+        <pose frame=''>-4.81365 2.61172 1.08539 2.3e-05 -6e-06 -1.50463</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>-4.81365 2.61172 1.08539 -0.000143 -8.8e-05 -1.50463</pose>
+          <pose frame=''>-4.81365 2.61172 1.08539 2.3e-05 -6e-06 -1.50463</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>7.1e-05 1.7e-05 -0.588863 -2.23847 -1.20693 -3.14111</acceleration>
-          <wrench>7e-06 2e-06 -0.058886 0 -0 0</wrench>
+          <acceleration>-1e-05 3.2e-05 -9.56739 0.248907 0.322199 -1.7e-05</acceleration>
+          <wrench>-1e-06 3e-06 -0.956739 0 -0 0</wrench>
         </link>
       </model>
       <model name='coffee_cup_tag36_11_00003'>
-        <pose frame=''>-4.64574 2.61029 1.08538 0.000103 8.6e-05 -1.55929</pose>
+        <pose frame=''>-4.64574 2.61029 1.08538 1.9e-05 7.1e-05 -1.55929</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>-4.64574 2.61029 1.08538 0.000103 8.6e-05 -1.55929</pose>
+          <pose frame=''>-4.64574 2.61029 1.08538 1.9e-05 7.1e-05 -1.55929</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -0.98 0 -0 0</wrench>
         </link>
       </model>
       <model name='coffee_cup_tag36_11_00004'>
-        <pose frame=''>-4.47642 2.61042 1.08539 -9e-06 -8.5e-05 -1.53289</pose>
+        <pose frame=''>-4.47642 2.61042 1.08539 -8e-06 -1.5e-05 -1.53289</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>-4.47642 2.61042 1.08539 -9e-06 -8.5e-05 -1.53289</pose>
+          <pose frame=''>-4.47642 2.61042 1.08539 -8e-06 -1.5e-05 -1.53289</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-4.1e-05 -4.2e-05 -5.7606 -2.96924 0.180234 3.14149</acceleration>
-          <wrench>-4e-06 -4e-06 -0.57606 0 -0 0</wrench>
+          <acceleration>-4e-06 -1.4e-05 -0.404948 3.08039 1.16513 3.9e-05</acceleration>
+          <wrench>-0 -1e-06 -0.040495 0 -0 0</wrench>
         </link>
       </model>
       <model name='coffee_cup_tag36_11_00005'>
-        <pose frame=''>-4.28619 2.60643 1.08539 1.3e-05 1.9e-05 -1.60039</pose>
+        <pose frame=''>-4.28619 2.60643 1.08539 3.6e-05 1.8e-05 -1.60039</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>-4.28619 2.60643 1.08539 1.3e-05 1.9e-05 -1.60039</pose>
+          <pose frame=''>-4.28619 2.60643 1.08539 3.6e-05 1.8e-05 -1.60039</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>7.2e-05 5.2e-05 18.0796 2.35533 -0.652675 -3.14116</acceleration>
-          <wrench>7e-06 5e-06 1.80796 0 -0 0</wrench>
+          <acceleration>1.6e-05 -7e-06 1.86568 -1.66645 1.11516 0.000272</acceleration>
+          <wrench>2e-06 -1e-06 0.186568 0 -0 0</wrench>
         </link>
       </model>
       <model name='coffee_maker'>
@@ -702,10 +702,10 @@
         </link>
       </model>
       <model name='coffee_maker_clone_clone'>
-        <pose frame=''>-5.35503 2.97746 1.21005 0 -0 0</pose>
+        <pose frame=''>-5.35503 2.97746 1.08045 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>-5.35503 2.97746 1.21005 0 -0 0</pose>
+          <pose frame=''>-5.35503 2.97746 1.08045 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -2657,7 +2657,7 @@
     </model>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>1.53769 -20.4247 23.207 0 0.857797 1.56401</pose>
+        <pose frame=''>2.1767 -13.7525 27.2199 -0 1.1058 1.56001</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -4268,7 +4268,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/karen/husky_cor_ws/src/husky_cor/husky_cor_gazebo/models/reception_desk/meshes/reception_desk.obj</uri>
+              <uri>model://reception_desk/meshes/reception_desk.obj</uri>
               <scale>0.01 0.01 0.01</scale>
             </mesh>
           </geometry>
