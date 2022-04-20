@@ -49,11 +49,12 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>gazebo_ros</exec_depend>
 
-
-  <!-- The export tag contains other, unspecified, tags -->
+  <!-- Pass gazebo env variables to gazebo_ros -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+    <gazebo_ros gazebo_media_path="${prefix}"/>
+    <gazebo_ros gazebo_model_path="${prefix}/models/AH_store:${prefix}/models/AH_thee:${prefix}/models/AH_hagelslag_melk:${prefix}/models/AH_hagelslag_puur
+    ${prefix}/models/AH_thee_mango:${prefix}/models/AH_thee_bosvruchten:${prefix}/models/legacy_models:${prefix}/models/coffee_cups:${prefix}/models"/>
   </export>
 </package>
