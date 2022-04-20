@@ -13,7 +13,8 @@ Create a catkin workspace and clone all required dependencies listed in `cor_mdp
 ``` bash
 mkdir -p <my_catkin_ws>/src # if no catkin_ws yet
 cd <my_catkin_ws>/src
-vcs import --input cor_mdp_tiago.rosinstall .
+git clone <cor_mdp_husky>
+vcs import --input cor_mdp_tiago/cor_mdp_tiago.rosinstall .
 cd ..
 ```
 
