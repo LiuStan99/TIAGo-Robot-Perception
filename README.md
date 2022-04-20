@@ -50,3 +50,11 @@ roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_ahold
 roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_festo
 ```
 
+## Marker Detection
+
+In both the Festo and Ahold world, you may notice there are some items with markers on them. You can use these markers to easily detect the pose of the items. Please have a look at [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros) to get a better understanding of how to use marker detection. The apriltag detection node is already included in `tiago.launch`.
+
+**Important:** People who have followed the course KRR (Knowledge Reasoning and Representation) are likely familiar with Aruco markers, however the detection accuracy proved insufficient. Therefore, we have opted to use a different marker detection package by default for this course, see [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros). 
+
+> Ofcourse you are free to explore different marker detection packages, or even detection methods that don't require markers!
+
