@@ -57,5 +57,5 @@ In both the Festo and Ahold world, you may notice there are some items with mark
 
 **Important:** People who have followed the course KRR (Knowledge Reasoning and Representation) are likely familiar with Aruco markers, however the detection accuracy proved insufficient. Therefore, we have opted to use a different marker detection package by default for this course, see [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros). 
 
-> Ofcourse you are free to explore different marker detection packages, or even detection methods that don't require markers!
+> Of course you are free to explore different marker detection packages, or even detection methods that don't require markers!
 
