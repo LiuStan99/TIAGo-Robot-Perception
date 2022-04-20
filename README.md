@@ -33,10 +33,11 @@ catkin build && source devel/setup.bash
 
 ## Quickstart
 
-When starting the simulation for the first time run the following bash script. This will add the correct gazebo paths to your .bashrc
+When starting the simulation for the **first** time run the following bash script. This will add the correct gazebo paths to your `.bashrc`. Also make sure to source your `.bashrc` afterwards.
 ```
-roscd cor_mdp_tiago_gazebo
-source scripts/set_gazebo_env.sh
+roscd cor_mdp_tiago_gazebo/scripts
+./set_gazebo_env.sh
+source ~/.bashrc
 ```
 
 ### Ahold project
