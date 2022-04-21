@@ -3,7 +3,7 @@
 
   <!-- General args -->
   <arg name="gzclient" default="true" />
-  <arg name="gzpose" default="-x 0.0 -y 0.0 -z 0.0 -R 0.0 -P 0.0 -Y 0.0" />
+  <arg name="gzpose" default="-x 0.0 -y 0.0 -z 0.0 -R 0.0 -P 0.0 -Y 3.14" />
   <arg name="world" default="mdp_ahold" />
   <arg name="map" default="$(find cor_mdp_tiago_gazebo)/maps/$(arg world)" />
   <arg name="use_aruco" default="false" />
@@ -23,7 +23,7 @@
   <arg name="tuck_arm" default="False" />
   <arg name="use_moveit_camera" default="true" />
   <arg name="public_sim" default="true" />
-  <arg name="nav_mode" default="navigation" doc="options: navigation, mapping" />
+  <arg name="nav_mode" default="mapping" doc="options: navigation, mapping" />
 
   <!-- Recommended way to launch tiago dual sim including navigation (Requires env variables to find models and resources of this repository!)-->
   <include file="$(find tiago_dual_2dnav_gazebo)/launch/tiago_dual_$(arg nav_mode).launch" pass_all_args="true" />
