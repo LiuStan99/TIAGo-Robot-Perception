@@ -6,7 +6,6 @@
   <arg name="gzpose" default="-x 0.0 -y 0.0 -z 0.0 -R 0.0 -P 0.0 -Y 3.14" />
   <arg name="world" default="mdp_ahold" />
   <arg name="map" default="$(find cor_mdp_tiago_gazebo)/maps/$(arg world)" />
-  <arg name="use_aruco" default="false" />
   <arg name="use_april" default="true" />
   <arg name="use_rviz" default="true" />
   <arg name="rviz" default="false" /> <!-- Prevent using the pal robotics rviz config -->
@@ -43,13 +42,6 @@
     <node name="octomap_throttle" pkg="topic_tools" type="throttle" args="messages /xtion/depth_registered/points 2  /throttle_filtering_points/filtered_points" />
     <param name="move_group/octomap_resolution" type="double" value="0.05" />
     <param name="move_group/octomap_frame" type="string" value="map" />
-  </group>
-
-  <!-- Launch Aruco Detection -->
-  <group if="$(eval arg('use_aruco'))">
-    <param name="aruco/use_aruco" type="bool" value="$(arg use_aruco)" />
-
-    <include file="$(find retail_store_simulation)/launch/aruco.launch" />
   </group>
 
   <!-- Launch April Tag Detection -->
