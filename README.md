@@ -35,13 +35,6 @@ catkin build && source devel/setup.bash
 
 ## Quickstart
 
-When starting the simulation for the **first** time run the following bash script. This will add the correct gazebo paths to your `.bashrc`. Also make sure to source your `.bashrc` afterwards.
-```
-roscd cor_mdp_tiago_gazebo/scripts
-./set_gazebo_env.sh
-source ~/.bashrc
-```
-
 ### Ahold project
 
 ```
@@ -60,7 +53,7 @@ roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
 
 ## Marker Detection
 
-In both the Festo and Ahold world, you may notice there are some items with markers on them. You can use these markers to easily detect the pose of the items. Please have a look at [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros) to get a better understanding of how to use marker detection. The apriltag detection node is already included in `tiago.launch`.
+In both the Festo and Ahold world, you may notice there are some items with markers on them. You can use these markers to easily detect the pose of the items. Please have a look at [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros) to get a better understanding of how to use marker detection. The apriltag detection node is already included in both launch files.
 
 **Important:** People who have followed the course KRR (Knowledge Reasoning and Representation) are likely familiar with Aruco markers, however the detection accuracy proved insufficient. Therefore, we have opted to use a different marker detection package by default for this course, see [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros). 
 
