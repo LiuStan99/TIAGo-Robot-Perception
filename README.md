@@ -48,11 +48,15 @@ source ~/.bashrc
 roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_ahold
 ```
 
+![ahold world image](ahold_world.png)
+
 ### Festo project
 
 ```
 roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
 ```
+
+![festo world image](festo_world.png)
 
 ## Marker Detection
 
