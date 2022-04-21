@@ -45,7 +45,7 @@ source ~/.bashrc
 ### Ahold project
 
 ```
-roslaunch cor_mdp_tiago_gazebo tiago.launch world:=mdp_ahold
+roslaunch cor_mdp_tiago_gazebo tiago_ahold.launch
 ```
 
 ![ahold world image](ahold_world.png)
