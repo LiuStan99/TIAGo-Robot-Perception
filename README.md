@@ -59,3 +59,30 @@ In both the Festo and Ahold world, you may notice there are some items with mark
 
 > Of course you are free to explore different marker detection packages, or even detection methods that don't require markers!
 
+
+## Perception nodes
+
+To activate perception nodes, run
+```
+roslaunch person_detector detector.launch
+```
+
+To visualize, in the second window, run
+
+```
+rosrun rqt_image_view rqt_image_view
+```
+
+In case you want to drive the robot, in the third window, run
+
+```
+rosrun key_teleop key_teleop.py
+```
+
+The detected people's locations are published via **vision_msgs/Detection3DArray**. 
+
+http://docs.ros.org/en/api/vision_msgs/html/msg/Detection3DArray.html
+
+The position of a person can be read from the bouding box center.
+
+http://docs.ros.org/en/api/vision_msgs/html/msg/BoundingBox3D.html
