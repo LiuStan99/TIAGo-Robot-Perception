@@ -62,6 +62,13 @@ In both the Festo and Ahold world, you may notice there are some items with mark
 
 ## Perception nodes
 
+if errors occur during 'catkin build' related to "vision_msgs" use:
+```
+git clone https://github.com/ros-perception/vision_msgs.git
+```
+from the catkin_ws/src/ directory
+
+
 To activate perception nodes, run
 ```
 roslaunch person_detector detector.launch
