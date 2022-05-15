@@ -15,6 +15,7 @@
 #include <vision_msgs/Detection3D.h>
 #include <vision_msgs/Detection2DArray.h>
 #include <geometry_msgs/PoseArray.h>
+#include <std_msgs/Bool.h>
 
 #include <string>
 #include <algorithm>
@@ -48,6 +49,7 @@ private:
     ros::Subscriber bbox_sub_;  //To be added
     ros::Publisher _detectionPub;
     ros::Publisher _PosePub;
+    ros::Publisher _BoolPub;
     bool detected_people_;
     cv::Mat _cameraMatrix;
 
@@ -99,6 +101,7 @@ nh_(nh)
   bbox_sub_ = nh_.subscribe("/pcl_obstacle_detector_node/detections", 1, &PersonDetector::bbox_callback, this);
   _detectionPub = nh_.advertise<vision_msgs::Detection3DArray>("/person_detector/bbox", 10);
   _PosePub = nh_.advertise<geometry_msgs::PoseArray>("/person_detector/pose", 10);
+  _BoolPub = nh_.advertise<std_msgs::Bool>("/hri_input", 10);
   img_pub_ = it_.advertise("/person_detector/visual", 3);//publisher for visualization
   detected_people_= false;
   cv::namedWindow("person detections");
@@ -133,6 +136,7 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
     tf::Transform transform;
     std::string newFrameId = "map";
     std::string oldFrameId = "xtion_rgb_optical_frame";
+    std_msgs::Bool bool_detected;
     vision_msgs::Detection3D box;
     geometry_msgs::PoseArray pose_msgs;
     geometry_msgs::Pose pose;
@@ -140,6 +144,7 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
     // sensor_msgs::ImagePtr pub_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", _mat_image).toImageMsg();
     // pub_msg->header=obstacles_msg.header;
     // img_pub_.publish(pub_msg);
+    detected_people_= false;
     
     if (obstacles_msg.detections.empty())
     {
@@ -230,10 +235,12 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
                 }
           }
       }
+      bool_detected.data=detected_people_;
       pose_msgs.header.frame_id=newFrameId;
       people_msg.header.frame_id=oldFrameId;
       _detectionPub.publish(people_msg);
       _PosePub.publish(pose_msgs);
+      _BoolPub.publish(bool_detected);
       publishDebugImage(_mat_image, debug_windows);
       // sensor_msgs::ImagePtr pub_msg = cv_bridge::CvImage(header, "bgr8", _mat_image).toImageMsg();
       // img_pub_.publish(pub_msg);
