@@ -2,6 +2,7 @@
 
 // PAL headers
 #include <pal_detection_msgs/Detections2d.h>
+#include "tf_transforms.hpp"
 
 // ROS headers
 #include <ros/ros.h>
@@ -13,6 +14,7 @@
 #include <vision_msgs/Detection3DArray.h>
 #include <vision_msgs/Detection3D.h>
 #include <vision_msgs/Detection2DArray.h>
+#include <geometry_msgs/PoseArray.h>
 
 #include <string>
 #include <algorithm>
@@ -28,6 +30,7 @@
 
 // Std C++ headers
 #include <vector>
+#include <stdlib.h> 
 
 /**
  * @brief The PersonDetector class encapsulating an image subscriber and the OpenCV's CPU HOG person detector
@@ -44,6 +47,7 @@ private:
     image_transport::Publisher img_pub_;
     ros::Subscriber bbox_sub_;  //To be added
     ros::Publisher _detectionPub;
+    ros::Publisher _PosePub;
     bool detected_people_;
     cv::Mat _cameraMatrix;
 
@@ -94,6 +98,7 @@ nh_(nh)
   img_sub_   = it_.subscribe(topic, 1, &PersonDetector::imageCallback, this, transport);
   bbox_sub_ = nh_.subscribe("/pcl_obstacle_detector_node/detections", 1, &PersonDetector::bbox_callback, this);
   _detectionPub = nh_.advertise<vision_msgs::Detection3DArray>("/person_detector/bbox", 10);
+  _PosePub = nh_.advertise<geometry_msgs::PoseArray>("/person_detector/pose", 10);
   img_pub_ = it_.advertise("/person_detector/visual", 3);//publisher for visualization
   detected_people_= false;
   cv::namedWindow("person detections");
@@ -124,6 +129,13 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
     int x,y,height,width;
     vision_msgs::Detection3DArray people_msg;
     std::vector<cv::Rect> debug_windows;
+    pal::TfTransformGetter trans_getter;
+    tf::Transform transform;
+    std::string newFrameId = "map";
+    std::string oldFrameId = "xtion_rgb_optical_frame";
+    vision_msgs::Detection3D box;
+    geometry_msgs::PoseArray pose_msgs;
+    geometry_msgs::Pose pose;
     // std::cout<<_mat_image<<std::endl;
     // sensor_msgs::ImagePtr pub_msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", _mat_image).toImageMsg();
     // pub_msg->header=obstacles_msg.header;
@@ -146,6 +158,8 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
                             1.0,                //final threshold
                             false);            //use mean-shift to fuse detections
       if (!foundLocations.empty()){
+          trans_getter.getTransform(oldFrameId,newFrameId,transform);
+          // std::cout<<(float)transform(0,0) <<std::endl;
           for (auto i = obstacles_msg.detections.begin(); i != obstacles_msg.detections.end(); i++)
           {
             if  ((*i).bbox.center.position.z > 0)
@@ -170,20 +184,44 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
                 // std::cout<<"image_rect:"<<image_rect<<std::endl;
                 // cv::Rect test_rect= image_rect & bbox_rect;
                 // std::cout<<"test_mat:"<<test_rect<<std::endl;
-                if (image_rect == (image_rect | bbox_rect)){
-                    float bbox_area=(float) bbox_rect.area();
-                    // debug_windows.push_back(bbox_rect);
+                if (((float)(image_rect & bbox_rect).area())/((float) bbox_rect.area())>0.6){
+                    // std::cout<<((float)(image_rect & bbox_rect).area())/((float) bbox_rect.area())<<std::endl;
+                    bbox_rect=image_rect & bbox_rect;
+                    float bbox_area=(float) bbox_rect.area(); 
                     for (auto j = foundLocations.begin(); j != foundLocations.end(); j++){
                         // std::cout<<*j<<std::endl;
-                        // debug_windows.push_back(*j);
+                        debug_windows.push_back(*j);
+                        // people_msg.detections.push_back(*i);
                         float detection_area=(float) j->area();
                         cv::Rect intersect= *j & bbox_rect;
                         float Intersection_area=(float)intersect.area();
-                        if ((Intersection_area/bbox_area >0.8) && (Intersection_area/detection_area >0.2)){
-                            debug_windows.push_back(bbox_rect);
+                        if ((Intersection_area/bbox_area >0.4) && (Intersection_area/detection_area >0.2)){
+                            // debug_windows.push_back(bbox_rect);
                             detected_people_= true;
                             people_msg.detections.push_back(*i);
                             std::cout<<"Person Detected!"<<std::endl;
+                            tf::Vector3 center_cam_frame = tf::Vector3((*i).bbox.center.position.x, (*i).bbox.center.position.y, (*i).bbox.center.position.z);
+                            // tf::Vector3 top_left_vec=tf::Vector3(top_left.at<float>(0,0), 
+                            //                                      top_left.at<float>(1,0), 
+                            //                                      top_left.at<float>(2,0));
+                            // tf::Vector3 down_right_vec=tf::Vector3(down_right.at<float>(0,0), 
+                            //                                        down_right.at<float>(1,0), 
+                            //                                        down_right.at<float>(2,0));
+                            // tf::Vector3 size_vec = trans_point(down_right_vec, transform)-trans_point(top_left_vec, transform);                                    
+                            tf::Vector3 center = trans_point(center_cam_frame, transform);
+                            pose.position.x=(float) center.getX();
+                            pose.position.y=(float) center.getY();
+                            pose.position.z=(float) center.getZ();
+                            pose_msgs.poses.push_back(pose);
+                            // box=*i;
+                            // box.bbox.size.x = (float) abs(size_vec.getX());
+                            // box.bbox.size.y = (float) abs(size_vec.getY());
+                            // box.bbox.size.z = (float) abs(size_vec.getZ());
+                            // box.bbox.center.position.x=(float) center.getX();
+                            // box.bbox.center.position.y=(float) center.getY();
+                            // box.bbox.center.position.z=(float) center.getZ();
+                            // box.header.frame_id = newFrameId;
+                            // people_msg.detections.push_back(box);
                             break;
                         }
                         
@@ -192,7 +230,10 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
                 }
           }
       }
+      pose_msgs.header.frame_id=newFrameId;
+      people_msg.header.frame_id=oldFrameId;
       _detectionPub.publish(people_msg);
+      _PosePub.publish(pose_msgs);
       publishDebugImage(_mat_image, debug_windows);
       // sensor_msgs::ImagePtr pub_msg = cv_bridge::CvImage(header, "bgr8", _mat_image).toImageMsg();
       // img_pub_.publish(pub_msg);
@@ -253,4 +294,74 @@ int main(int argc, char **argv)
   }
 
   return 0;
+}
+
+namespace pal {
+
+void convert(const Eigen::Matrix4d& transform,
+             geometry_msgs::Pose& pose)
+{
+  tf::Transform tfTransform;
+  tfTransform.setOrigin( tf::Vector3(transform(0,3), transform(1,3), transform(2,3)) );
+  tf::Matrix3x3 basis;
+
+  basis.setValue(transform(0,0), transform(0,1), transform(0,2),
+                 transform(1,0), transform(1,1), transform(1,2),
+                 transform(2,0), transform(2,1), transform(2,2));
+  tfTransform.setBasis(basis);
+
+  geometry_msgs::PoseStamped poseMsg;
+  tf::poseTFToMsg(tfTransform, pose);
+}
+
+TfTransformGetter::TfTransformGetter()
+{
+
+}
+
+TfTransformGetter::~TfTransformGetter()
+{
+
+}
+
+void TfTransformGetter::getTransform(const std::string& childFrame,
+                                     const std::string& parentFrame,
+                                     tf::Transform& transform)
+{
+  std::string errMsg;
+
+  if ( !_tfListener.waitForTransform(parentFrame,
+                                     childFrame,
+                                     ros::Time(0),
+                                     ros::Duration(1.5),
+                                     ros::Duration(0.01),
+                                     &errMsg)
+       )
+  {
+    throw std::runtime_error("TfTransformGetter::getTransform: unable to get pose from TF: "
+                             + errMsg);
+  }
+  else
+  {
+    try
+    {
+      tf::StampedTransform stampedTransform;
+      _tfListener.lookupTransform( parentFrame, childFrame,
+                                   ros::Time(0),                  //get latest available
+                                   stampedTransform);
+      transform = stampedTransform;
+    }
+    catch ( const tf::TransformException& e)
+    {
+      std::runtime_error("TfTransformGetter::getTransform: error in lookupTransform of " +
+                         childFrame + " in " + parentFrame);
+    }
+  }
+}
+
+} //pal
+
+tf::Vector3 trans_point(const tf::Vector3& point, tf::Transform& transform){
+  tf::Vector3 trans_point=transform(point);
+  return trans_point;
 }

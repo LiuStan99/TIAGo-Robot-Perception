@@ -6,7 +6,7 @@ Obstacle_Detector::Obstacle_Detector()
 {
     point_cloud_sub_ = nh_.subscribe("/xtion/depth_registered/points", 10, &Obstacle_Detector::cloud_callback, this);
     obstacle_pub_ = nh_.advertise<vision_msgs::Detection3DArray>("/pcl_obstacle_detector_node/detections", 10);
-    // pt_pub_= nh_.advertise<sensor_msgs::PointCloud2> ("/pcl_obstacle_detector_node/pcl_output", 1);
+    pt_pub_= nh_.advertise<sensor_msgs::PointCloud2> ("/pcl_obstacle_detector_node/pcl_output", 1);
 }
 
 void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
@@ -35,6 +35,11 @@ void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
     pass2.setFilterLimits (-1.1, 0.9);
     pass2.filter (*cloud);
 
+    pcl::VoxelGrid<pcl::PointXYZ> sor;
+    sor.setInputCloud(cloud);			//设置滤波对象的需要的点云
+    sor.setLeafSize (0.01f, 0.01f, 0.01f);  //设置滤波创建的体素大小为1cm
+    sor.filter (*cloud);
+    // std::cout<<"size of pcl="<<sizeof(*cloud)<<std::endl;
     // pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
     // pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
     // // Create the segmentation object
@@ -59,16 +64,16 @@ void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
     // extract.setIndices(inliers);
     // extract.setNegative(true);
     // extract.filter(*cloud);
-    // sensor_msgs::PointCloud2 output;
-    // pcl::toROSMsg(*cloud, output);
+    sensor_msgs::PointCloud2 output;
+    pcl::toROSMsg(*cloud, output);
     // Creating the KdTree object for the search method of the extraction
     pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
     tree->setInputCloud(cloud);
 
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-    ec.setClusterTolerance(0.1);
-    ec.setMinClusterSize(10);
+    ec.setClusterTolerance(0.075);
+    ec.setMinClusterSize(7);
     ec.setMaxClusterSize(80000);
     ec.setSearchMethod(tree);
     ec.setInputCloud(cloud);
@@ -114,7 +119,7 @@ void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
     }
 
     obstacle_pub_.publish(barrel_msg);
-    // pt_pub_.publish(output);
+    pt_pub_.publish(output);
 }
 
 int main(int argc, char **argv)

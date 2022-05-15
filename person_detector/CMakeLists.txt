@@ -5,18 +5,25 @@ find_package(catkin REQUIRED COMPONENTS image_transport
                                         pal_detection_msgs
                                         cv_bridge
                                         roscpp
+					tf
+					std_msgs
   					vision_msgs
   					pcl_ros
   					pcl_conversions
   					sensor_msgs)
 find_package(OpenCV REQUIRED)
 
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
+
 
 catkin_package(
   CATKIN_DEPENDS image_transport cv_bridge pal_detection_msgs roscpp
 )
 
-include_directories(SYSTEM ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
+include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 add_executable(person_detector src/person_detector.cpp)
 target_link_libraries(person_detector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

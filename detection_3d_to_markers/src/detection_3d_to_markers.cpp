@@ -52,6 +52,7 @@ visualization_msgs::MarkerArray toMarkerArray(vision_msgs::Detection3DArray cons
 Detection3dToMarkers::Detection3dToMarkers(ros::NodeHandle & nh) : nh_(nh) {
 	ROS_INFO("Initialized 3d detection to markers node.");
 	detections_sub_ = nh_.subscribe("/person_detector/bbox", 1, &Detection3dToMarkers::detections_callback, this);
+	// detections_sub_ = nh_.subscribe("/pcl_obstacle_detector_node/detections", 1, &Detection3dToMarkers::detections_callback, this);
 	markers_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("markers", 100);
 }
 

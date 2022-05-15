@@ -20,6 +20,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/common/common.h>
 #include <pcl/common/centroid.h>
+#include <pcl/filters/voxel_grid.h>
 
 
 class Obstacle_Detector

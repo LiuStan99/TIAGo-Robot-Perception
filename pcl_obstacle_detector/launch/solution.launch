@@ -1,6 +1,6 @@
 <launch>
 
-	<node name="pcl_obstacle_detector" pkg="pcl_obstacle_detector" type="pcl_obstacle_detector_node"/>
+	<node name="pcl_obstacle_detector" pkg="pcl_obstacle_detector" type="pcl_obstacle_detector_node" output="screen"/>
 	<!--node name="detection_3d_to_markers" pkg="detection_3d_to_markers" type="detection_3d_to_markers_node"/-->
 	
 
