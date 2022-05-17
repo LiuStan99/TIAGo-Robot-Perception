@@ -9,8 +9,8 @@ roslib.load_manifest('hri')
 from hri.msg import speechAction, speechGoal
 
 if __name__ == '__main__':
-    rospy.init_node('hri_test_client')
-    client = actionlib.SimpleActionClient('talk', speechAction)
+    rospy.init_node('hri_test_speech_client')
+    client = actionlib.SimpleActionClient('speech', speechAction)
     rospy.loginfo("Waiting for Speech Server")
     client.wait_for_server()
     rospy.loginfo("Reached Speech Server")

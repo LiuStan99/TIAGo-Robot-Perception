@@ -1,6 +1,6 @@
 <launch>
 	<node name="sound_play_node" pkg="sound_play" type="soundplay_node.py" />
 	<node name="tts_to_soundplay" pkg="tts" type="tts_to_soundplay.py" />
-	<node name="hri_tts_client" pkg="hri" type="talk.py" output="screen"/>
-	<node name="hri_test_client" pkg="hri" type="test.py" output="screen"/>
+	<node name="hri_speech_node" pkg="hri" type="speech.py" output="screen"/>
+	<node name="hri_test_speech_client" pkg="hri" type="test.py" output="screen"/>
 </launch>
