@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Boost REQUIRED COMPONENTS thread)
 
-add_action_files(DIRECTORY action FILES speech.action)
+add_action_files(DIRECTORY action FILES speech.action gesture.action)
 generate_messages(DEPENDENCIES actionlib_msgs)
 
 
@@ -39,7 +39,7 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(hri src/hri_wave_node.cpp src/wave.cpp)
+add_executable(hri src/hri_gesture_node.cpp src/make_gesture.cpp)
 
 add_dependencies(hri ${catkin_EXPORTED_TARGETS})
 target_link_libraries(hri ${catkin_LIBRARIES})

@@ -1,4 +1,4 @@
-#include "wave.h"
+#include "make_gesture.h"
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "HRI_wave");
