@@ -29,13 +29,12 @@ There are two actions:
 
 #### gesture.action
 The **goal** has an integer named *situation*, the values have the following meaning:
-- 0 : welcome
-- 1 : introduction
-- 2 : point of interest 1
-- 3 : point of interest 2
-- 4 : point of interest 3
-- 5 : ending
-- 6 : not working properly
+- 0 : point_at
+- 1 : look_at
+- 2 : look_around
+- 3 : presentation_pose
+- 4 : wave
+- 5 : bow
 
 The **result** has an integer named *result*, the values have the following meaning:
 - 0 : failure
