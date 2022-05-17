@@ -11,8 +11,11 @@ This package contains all files for the TIAGo robot operating at FESTO as a host
 
 In order to test the working of the hri speech, run the following commands (assuming you are in the TIAGo workspace):
 > source /opt/ros/melodic/setup.bash
+
 > source ./devel/setup.bash
+
 > roslaunch tiago_gazebo tiago_gazebo.launch public_sim:=true robot:=titanium world:=empty
+
 > roslaunch hri speech.launch
 
 This launches an empty world, the speech_node and the test_speech_node. 
