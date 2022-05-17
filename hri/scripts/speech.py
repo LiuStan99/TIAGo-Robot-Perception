@@ -12,6 +12,8 @@ from pal_interaction_msgs.msg import TtsAction, TtsGoal
 
 from hri.msg import speechAction
 
+path = "/home/stijn/tiago_dual_public_ws/src/cor_mdp_tiago/hri/speeches"
+
 class server:
 	def __init__(self):
 		self.server = actionlib.SimpleActionServer('speech', speechAction, self.execute, auto_start=False)
@@ -91,7 +93,7 @@ if __name__ == '__main__':
 	rospy.loginfo("Reached TTS Server")
 	goal = TtsGoal()
 
-	data_folder = "/home/stijn/tiago_dual_public_ws/src/cor_mdp_tiago/hri/speeches"
+	data_folder = path
 
 	if test_server:
 		obj = server()

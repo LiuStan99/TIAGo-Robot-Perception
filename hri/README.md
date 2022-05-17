@@ -1,6 +1,9 @@
 # This is the README for the Human Robot Interaction package
 *Author: Stijn Lafontaine*
 
+**BEFORE RUNNING ANYTHING** make sure that the path variable in scripts/speech.py is correct, namely the absolute path to the speeches folder, eg:
+> "/home/$USER/$WORKSPACE_NAME/src/cor_mdp_tiago/hri/speeches"
+
 This package contains all files for the TIAGo robot operating at FESTO as a host. It consists of the following folders:
  - action 
  - include
