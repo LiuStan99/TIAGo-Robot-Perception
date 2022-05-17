@@ -4,9 +4,27 @@
 from mimetypes import init
 import rospy
 import actionlib
+import roslib
+roslib.load_manifest('hri')
 
 #import PAL Robotics custom headers
 from pal_interaction_msgs.msg import TtsAction, TtsGoal
+
+from hri.msg import speechAction
+
+class server:
+	def __init__(self):
+		self.server = actionlib.SimpleActionServer('talk', speechAction, self.execute, auto_start=False)
+		self.server.start()
+		rospy.sleep(1)
+		rospy.loginfo("Started talk_server")
+
+	def execute(self, goal):
+		self.situation = goal.situation
+		#self.server.publish_feedback(1)
+		initiate_speech(config_speech(self.situation))
+		self.results = 1
+		self.server.set_succeeded(self.results)
 
 def event(event):
 	return {
@@ -26,17 +44,7 @@ def feedbackCb(feedback):
 	print("current word: " + feedback.text_said)
 	print("next word: " + feedback.next_word)
 	print("-")
-'''
-class server:
-	def __init__(self):
-		self.server = actionlib.SimpleActionServer('name_placeholder_server', DoSomethingAction, self.execute, auto_start=False)
-		self.server.start()
-	def execute(self, goal):
 
-		self.server.set_succeeded
-		
-
-'''
 def config_speech(situation):
 	"""
 	goal has integer (situation)
@@ -74,29 +82,37 @@ def initiate_speech(text):
 	print("---")
 
 if __name__ == '__main__':
+	test_server = True
+
 	rospy.init_node('hri_tts_client')
 	client = actionlib.SimpleActionClient('tts_to_soundplay', TtsAction)
-	rospy.loginfo("Waiting for Server")
+	rospy.loginfo("Waiting for TTS Server")
 	client.wait_for_server()
-	rospy.loginfo("Reached Server")
+	rospy.loginfo("Reached TTS Server")
 	goal = TtsGoal()
 
 	data_folder = "/home/stijn/tiago_dual_public_ws/src/cor_mdp_tiago/hri/speeches"
 
-	run = True
-	done = False
-	while run:
-		if rospy.Time.now() > rospy.Time(10) and done == False:
-			msg_received = True
-		else:
-			msg_received = False
+	if test_server:
+		obj = server()
+		rospy.spin()	
+	else:
+		data_folder = "/home/stijn/tiago_dual_public_ws/src/cor_mdp_tiago/hri/speeches"
+
+		run = True
+		done = False
+		while run:
+			if rospy.Time.now() > rospy.Time(10) and done == False:
+				msg_received = True
+			else:
+				msg_received = False
 
 
-		if msg_received:
-			msg_goal = 1 # TODO goal of action that is received
-			initiate_speech(config_speech(msg_goal))
-			done = True
-		
-		if rospy.Time.now() > rospy.Time(100):
-			print("Time is above 100 sec simulated time, time to sleep")
-			run = False
+			if msg_received:
+				msg_goal = 1 # TODO goal of action that is received
+				initiate_speech(config_speech(msg_goal))
+				done = True
+			
+			if rospy.Time.now() > rospy.Time(100):
+				print("Time is above 100 sec simulated time, time to sleep")
+				run = False

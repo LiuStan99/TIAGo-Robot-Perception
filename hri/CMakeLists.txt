@@ -3,6 +3,8 @@ project(hri)
 
 
 find_package(catkin REQUIRED COMPONENTS 
+                            actionlib_msgs
+                            genmsg
                             actionlib 
                             control_msgs 
                             controller_manager_msgs
@@ -16,6 +18,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 
 find_package(Boost REQUIRED COMPONENTS thread)
+
+add_action_files(DIRECTORY action FILES speech.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
+
 
 catkin_package(
      INCLUDE_DIRS include
