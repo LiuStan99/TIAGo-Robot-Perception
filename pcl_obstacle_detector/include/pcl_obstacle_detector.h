@@ -7,6 +7,8 @@
 #include <vision_msgs/Detection3DArray.h>
 #include <vision_msgs/Detection3D.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <actionlib/server/simple_action_server.h>
+#include <person_detector/person_detectorAction.h>
 //PCL includes
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -30,8 +32,26 @@ private:
     ros::Subscriber point_cloud_sub_;
     ros::Publisher obstacle_pub_;
     ros::Publisher pt_pub_;
+    int goal_;
 
 public:
-    Obstacle_Detector();
+    Obstacle_Detector(std::string name);
+    ~Obstacle_Detector();
     void cloud_callback(const sensor_msgs::PointCloud2 &input);
+    void goalCB()
+    {
+      // accept the new goal
+      goal_ = as_.acceptNewGoal()->goal;
+    };
+    void preemptCB()
+    {
+      ROS_INFO("%s: Preempted", action_name_.c_str());
+      // set the action state to preempted
+      as_.setPreempted();
+    };
+protected:
+    actionlib::SimpleActionServer<person_detector::person_detectorAction> as_;
+    person_detector::person_detectorFeedback feedback_;
+    person_detector::person_detectorResult result_;
+    std::string action_name_;
 };

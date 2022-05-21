@@ -13,6 +13,9 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   pcl_conversions
   sensor_msgs
+  person_detector
+  actionlib 
+	actionlib_msgs
 )
 
 ## System dependencies are found with CMake's conventions

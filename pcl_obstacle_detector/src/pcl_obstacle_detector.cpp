@@ -2,15 +2,30 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/filter.h>
 
-Obstacle_Detector::Obstacle_Detector()
+
+Obstacle_Detector::Obstacle_Detector(std::string name):
+as_(nh_, name, false),
+action_name_(name)
 {
+    as_.registerGoalCallback(boost::bind(&Obstacle_Detector::goalCB, this));
+    as_.registerPreemptCallback(boost::bind(&Obstacle_Detector::preemptCB, this));
     point_cloud_sub_ = nh_.subscribe("/xtion/depth_registered/points", 10, &Obstacle_Detector::cloud_callback, this);
     obstacle_pub_ = nh_.advertise<vision_msgs::Detection3DArray>("/pcl_obstacle_detector_node/detections", 10);
     pt_pub_= nh_.advertise<sensor_msgs::PointCloud2> ("/pcl_obstacle_detector_node/pcl_output", 1);
+    as_.start();
 }
-
+Obstacle_Detector::~Obstacle_Detector()
+{
+  as_.shutdown();
+}
 void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
 {
+    if (!as_.isActive())
+      return;
+    if (as_.isPreemptRequested())
+      return;
+    if (goal_!=1)
+      return;
     // Convert the sensor_msgs/PointCloud2 data to pcl/PointCloud
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
     // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
@@ -127,7 +142,7 @@ int main(int argc, char **argv)
     // Initialize ROS
     ros::init(argc, argv, "pcl_obstacle_detector_node");
 
-    Obstacle_Detector obstacle_detector;
+    Obstacle_Detector obstacle_detector("person_detector");
 
     // Spin
     ros::spin();

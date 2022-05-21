@@ -10,17 +10,26 @@ find_package(catkin REQUIRED COMPONENTS image_transport
   					vision_msgs
   					pcl_ros
   					pcl_conversions
-  					sensor_msgs)
+  					sensor_msgs
+					actionlib 
+					actionlib_msgs)
 find_package(OpenCV REQUIRED)
+
+## Add actions
+add_action_files(DIRECTORY action FILES person_detector.action)
 
 generate_messages(
    DEPENDENCIES
    std_msgs
+   actionlib_msgs
 )
 
 
+
+
+
 catkin_package(
-  CATKIN_DEPENDS image_transport cv_bridge pal_detection_msgs roscpp
+  CATKIN_DEPENDS image_transport cv_bridge pal_detection_msgs roscpp actionlib actionlib_msgs
 )
 
 include_directories(SYSTEM include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
