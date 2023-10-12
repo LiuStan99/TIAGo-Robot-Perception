@@ -16,8 +16,6 @@
 #include <vision_msgs/Detection2DArray.h>
 #include <geometry_msgs/PoseArray.h>
 #include <std_msgs/Bool.h>
-#include <actionlib/server/simple_action_server.h>
-#include <person_detector/person_detectorAction.h>
 
 #include <string>
 #include <algorithm>
@@ -54,25 +52,12 @@ private:
     ros::Publisher _BoolPub;
     bool detected_people_;
     cv::Mat _cameraMatrix;
-    int goal_;
 
 public:
-    PersonDetector(ros::NodeHandle& nh, std::string name);
+    PersonDetector(ros::NodeHandle& nh);
     void bbox_callback(const vision_msgs::Detection3DArray &obstacles_msg);
     cv::Mat _mat_image;
     virtual ~PersonDetector();
-    void goalCB()
-    {
-      // accept the new goal
-      goal_ = as_.acceptNewGoal()->goal;
-    };
-    void preemptCB()
-    {
-      ROS_INFO("%s: Preempted", action_name_.c_str());
-      // set the action state to preempted
-      as_.setPreempted();
-    };
-
 protected:
   mutable cv_bridge::CvImage _cvImgDebug;
   ros::Time _imgTimeStamp;
@@ -83,24 +68,17 @@ protected:
   boost::scoped_ptr<cv::HOGDescriptor> _hogCPU;
   void publishDebugImage(cv::Mat& img,
                          const std::vector<cv::Rect>& detections) const;
-  actionlib::SimpleActionServer<person_detector::person_detectorAction> as_;
-  person_detector::person_detectorFeedback feedback_;
-  person_detector::person_detectorResult result_;
-  std::string action_name_;
 };
 
 
-PersonDetector::PersonDetector(ros::NodeHandle& nh,std::string name):
+PersonDetector::PersonDetector(ros::NodeHandle& nh):
 it_(nh),
-nh_(nh),
-as_(nh, name, false),
-action_name_(name)
+nh_(nh)
 {
   ROS_INFO("Waiting for camera_info topic ...");
   sensor_msgs::CameraInfoConstPtr msg = ros::topic::waitForMessage<sensor_msgs::CameraInfo>("/xtion/rgb/camera_info");
   ROS_INFO("Ok");
-  as_.registerGoalCallback(boost::bind(&PersonDetector::goalCB, this));
-  as_.registerPreemptCallback(boost::bind(&PersonDetector::preemptCB, this));
+
 
   _cameraMatrix = cv::Mat::zeros(3,3, CV_32FC1);
 
@@ -127,12 +105,10 @@ action_name_(name)
   img_pub_ = it_.advertise("/person_detector/visual", 3);//publisher for visualization
   detected_people_= false;
   cv::namedWindow("person detections");
-  as_.start();
 }
 PersonDetector::~PersonDetector()
 {
   cv::destroyWindow("person detections");
-  as_.shutdown();
 }
 
 
@@ -146,13 +122,6 @@ void PersonDetector::imageCallback(const sensor_msgs::ImageConstPtr& msg)
 }
 void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacles_msg)
 {
-    // make sure that the action hasn't been canceled
-    if (!as_.isActive())
-      return;
-    if (as_.isPreemptRequested())
-      return;
-    if (goal_!=1)
-      return;
     // vision_msgs::Detection3DArray detections_filtered;
     std::vector<cv::Rect> movingObjects;
     cv::Mat top_left= cv::Mat::ones(3,1,CV_32FC1);
@@ -273,16 +242,6 @@ void PersonDetector::bbox_callback(const vision_msgs::Detection3DArray &obstacle
       _PosePub.publish(pose_msgs);
       _BoolPub.publish(bool_detected);
       publishDebugImage(_mat_image, debug_windows);
-      if (detected_people_){
-        feedback_.status=1;
-        result_.status=1;
-        as_.setSucceeded(result_);
-      }
-      else{
-        feedback_.status=0;
-        result_.status=0;
-      }
-      as_.publishFeedback(feedback_);
       // sensor_msgs::ImagePtr pub_msg = cv_bridge::CvImage(header, "bgr8", _mat_image).toImageMsg();
       // img_pub_.publish(pub_msg);
     }
@@ -330,7 +289,7 @@ int main(int argc, char **argv)
 
   ROS_INFO_STREAM("Creating person detector ...");
 
-  PersonDetector detector(nh,ros::this_node::getName());
+  PersonDetector detector(nh);
 
   ROS_INFO_STREAM("Spinning to serve callbacks ...");
 

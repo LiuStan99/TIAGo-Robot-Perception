@@ -2,44 +2,29 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/filter.h>
 
-
-Obstacle_Detector::Obstacle_Detector(std::string name):
-as_(nh_, name, false),
-action_name_(name)
+Obstacle_Detector::Obstacle_Detector()
 {
-    as_.registerGoalCallback(boost::bind(&Obstacle_Detector::goalCB, this));
-    as_.registerPreemptCallback(boost::bind(&Obstacle_Detector::preemptCB, this));
     point_cloud_sub_ = nh_.subscribe("/xtion/depth_registered/points", 10, &Obstacle_Detector::cloud_callback, this);
     obstacle_pub_ = nh_.advertise<vision_msgs::Detection3DArray>("/pcl_obstacle_detector_node/detections", 10);
     pt_pub_= nh_.advertise<sensor_msgs::PointCloud2> ("/pcl_obstacle_detector_node/pcl_output", 1);
-    as_.start();
 }
-Obstacle_Detector::~Obstacle_Detector()
-{
-  as_.shutdown();
-}
+
 void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
 {
-    if (!as_.isActive())
-      return;
-    if (as_.isPreemptRequested())
-      return;
-    if (goal_!=1)
-      return;
     // Convert the sensor_msgs/PointCloud2 data to pcl/PointCloud
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
     // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
     std::vector<int> mapping;
 	pcl::removeNaNFromPointCloud(*cloud, *cloud, mapping);
     pcl::fromROSMsg(input, *cloud);
-    pcl::PassThrough<pcl::PointXYZ> pass;//设置滤波器对象
+    pcl::PassThrough<pcl::PointXYZ> pass;
     pcl::PassThrough<pcl::PointXYZ> pass1;
     pcl::PassThrough<pcl::PointXYZ> pass2;
     pass.setInputCloud(cloud);
     pass.setFilterFieldName ("x");//x axis pointing right
     pass.setFilterLimits (-10.0, 10.0);
-    //pass.setFilterLimitsNegative (false);//设置保留范围内的还是过滤掉范围内的:算法内部默认false，即保留范围内的，滤掉范围外的；若设为true，则保留范围外的，滤掉范围内的；
-    //pass.setNegative (true);//作用同setFilterLimitsNegative
+    //pass.setFilterLimitsNegative (false);
+    //pass.setNegative (true);
     pass.filter (*cloud);
     pass1.setInputCloud(cloud);
     pass1.setFilterFieldName ("z");//z axis pointing outward
@@ -51,8 +36,8 @@ void Obstacle_Detector::cloud_callback(const sensor_msgs::PointCloud2 &input)
     pass2.filter (*cloud);
 
     pcl::VoxelGrid<pcl::PointXYZ> sor;
-    sor.setInputCloud(cloud);			//设置滤波对象的需要的点云
-    sor.setLeafSize (0.01f, 0.01f, 0.01f);  //设置滤波创建的体素大小为1cm
+    sor.setInputCloud(cloud);			
+    sor.setLeafSize (0.01f, 0.01f, 0.01f);  
     sor.filter (*cloud);
     // std::cout<<"size of pcl="<<sizeof(*cloud)<<std::endl;
     // pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
@@ -142,7 +127,7 @@ int main(int argc, char **argv)
     // Initialize ROS
     ros::init(argc, argv, "pcl_obstacle_detector_node");
 
-    Obstacle_Detector obstacle_detector("person_detector");
+    Obstacle_Detector obstacle_detector;
 
     // Spin
     ros::spin();

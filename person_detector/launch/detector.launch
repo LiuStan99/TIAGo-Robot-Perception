@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-  <include file="$(find cor_mdp_tiago_gazebo)/launch/tiago_festo.launch"/>
-  <include file="$(find pcl_obstacle_detector)/launch/solution.launch"/>
-  <node name="detection_3d_to_markers" pkg="detection_3d_to_markers" type="detection_3d_to_markers_node"/>
-  <node name="person_detector" pkg="person_detector" type="person_detector" output="screen"/>
+  <!-- <include file="$(find cor_mdp_tiago_gazebo)/launch/tiago_festo.launch"/> -->
+  <include file="$(find pcl_obstacle_detector)/launch/solution.launch" />
+  <node name="detection_3d_to_markers" pkg="detection_3d_to_markers" type="detection_3d_to_markers_node" /> 
+  <node name="person_detector" pkg="person_detector" type="person_detector" output="screen" />
   <!--node name="key_teleop" pkg="key_teleop" type="key_teleop.py"/-->
   <!--node name="rqt_image_view" pkg="rqt_image" type="rqt_image_view"/-->
 </launch>
