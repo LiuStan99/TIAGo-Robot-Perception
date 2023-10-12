@@ -7,5 +7,6 @@
         "/home/lxz/tiago_public_ws/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
-    "cmake.sourceDirectory": "/home/lxz/tiago_public_ws/src/cor_mdp_tiago/pcl_obstacle_detector"
+    "cmake.sourceDirectory": "/home/lxz/tiago_public_ws/src/cor_mdp_tiago/pcl_obstacle_detector",
+    "ros.distro": "noetic"
 }

@@ -1,0 +1,8 @@
+# Goal
+uint32 gesture  # Specify what gesture has to be executed
+---
+# Result
+uint32 result
+---
+# Feedback message
+uint32 status # Needs to be specified, 1 = running (?)

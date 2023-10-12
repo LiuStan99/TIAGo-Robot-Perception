@@ -22,23 +22,20 @@ The **pcl_obstacle detector** package detects obstacles using pointclouds from d
 
 #### **Simulation environment**
 
-The simulation is built upon the Tiago Simulation repository which aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally.
+The simulation is built upon the Tiago Simulation repository (from MDP project) which aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally. 
 
-**Important:** The only officially supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation.
+**Important:** The only officially supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation. For non-melodic version, please use the docker image by following the instruction on [TIAGo Docker turtorial](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). Please select the melodic version when pulling the image.
 
-## Local
+## Installation
 
 Create a catkin workspace and clone all required dependencies listed in `cor_mdp_tiago.rosinstall`. To automate the process [vcstool](http://wiki.ros.org/vcstool) can be used:
 
 ``` bash
-mkdir -p <my_catkin_ws>/src # if no catkin_ws yet
 cd <my_catkin_ws>/src
-git clone https://gitlab.tudelft.nl/cor/ro47007/2022/team-<XX>/cor_mdp_tiago.git
-vcs import --input cor_mdp_tiago/cor_mdp_tiago.rosinstall .
+vcs import --input TIAGo-Robot-Perception/cor_mdp_tiago.rosinstall .
 cd ..
 ```
 
-> Note: replace the `<XX>` with your team number
 
 Next, use rosdep to install other dependencies:
 ``` bash
@@ -53,12 +50,13 @@ Finally build and source the workspace:
 catkin build && source devel/setup.bash
 ```
 
-if errors occur during 'catkin build' related to "vision_msgs", please use the following command in the catkin_ws/src/ directory.:
+> Note: if errors occur during 'catkin build' related to "vision_msgs", please use the following command in the catkin_ws/src/ directory:
 ```
 cd <my_catkin_ws>/src
 git clone https://github.com/ros-perception/vision_msgs.git
 cd vision_msgs
 git checkout melodic-devel
+cd ../..
 ```
 
 Then rebuild and source the workspace.
