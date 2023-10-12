@@ -1,8 +1,28 @@
-# Cor Multidisciplinary Project - Tiago Simulation
+# Tiago Perception Simulation
 
 <img src="https://img.shields.io/badge/ROS%20version-melodic-blue.svg"/>
 
-Welcome to the Multidisciplinary Project - Tiago Simulation repository! This repository aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally.
+
+## Perception nodes
+
+#### **Introduction**
+
+Perception nodes are responsible for detecting and localizing objects from environment. Instead of using the existed packages which could not perform 3D localization, we have rewritten the perception nodes only based on some existed functions from OpenCV and PCL, so that human can directly be detected and localized in 3D world.
+
+There are two sub-nodes for perception:
+* pcl_obstacle_detector
+* person_detector
+
+The pipeline is shown as follow:
+![](pipeline_percep.png)
+
+The **pcl_obstacle detector** package detects obstacles using pointclouds from depth camera. The **person_detector** uses the camera and detected obstacles to classify human beings. It outputs the bounding boxes and pose array as output.
+
+**For detailed information, please refer to the readme file under person_detector and pcl_obstacle_detector folder.**
+
+#### **Simulation environment**
+
+The simulation is built upon the Tiago Simulation repository which aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally.
 
 **Important:** The only officially supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation.
 
@@ -33,17 +53,21 @@ Finally build and source the workspace:
 catkin build && source devel/setup.bash
 ```
 
+if errors occur during 'catkin build' related to "vision_msgs", please use the following command in the catkin_ws/src/ directory.:
+```
+cd <my_catkin_ws>/src
+git clone https://github.com/ros-perception/vision_msgs.git
+cd vision_msgs
+git checkout melodic-devel
+```
+
+Then rebuild and source the workspace.
+
+
 ## Quickstart
 
-### Ahold project
 
-```
-roslaunch cor_mdp_tiago_gazebo tiago_ahold.launch
-```
-
-![ahold world image](ahold_world.png)
-
-### Festo project
+### Test simulation environment
 
 ```
 roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
@@ -51,23 +75,7 @@ roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
 
 ![festo world image](festo_world.png)
 
-## Marker Detection
-
-In both the Festo and Ahold world, you may notice there are some items with markers on them. You can use these markers to easily detect the pose of the items. Please have a look at [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros) to get a better understanding of how to use marker detection. The apriltag detection node is already included in both launch files.
-
-**Important:** People who have followed the course KRR (Knowledge Reasoning and Representation) are likely familiar with Aruco markers, however the detection accuracy proved insufficient. Therefore, we have opted to use a different marker detection package by default for this course, see [apriltag_ros](https://github.com/AprilRobotics/apriltag_ros). 
-
-> Of course you are free to explore different marker detection packages, or even detection methods that don't require markers!
-
-
-## Perception nodes
-
-if errors occur during 'catkin build' related to "vision_msgs" use:
-```
-git clone https://github.com/ros-perception/vision_msgs.git
-```
-from the catkin_ws/src/ directory
-
+### Test perception nodes
 
 To activate perception nodes, run
 ```
@@ -93,3 +101,7 @@ http://docs.ros.org/en/api/vision_msgs/html/msg/Detection3DArray.html
 The position of a person can be read from the bouding box center.
 
 http://docs.ros.org/en/api/vision_msgs/html/msg/BoundingBox3D.html
+
+
+
+

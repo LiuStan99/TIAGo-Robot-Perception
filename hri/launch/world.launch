@@ -1,3 +1,0 @@
-<launch>
-  	<include file="$(find cor_mdp_tiago_gazebo)/launch/tiago_festo.launch"/>
-</launch>
