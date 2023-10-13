@@ -40,7 +40,7 @@ The position of a person can be read from the bouding box center.
 http://docs.ros.org/en/api/vision_msgs/html/msg/BoundingBox3D.html
 
 
-## Get Started
+<!-- ## Get Started
 
 If errors occur during 'catkin build' related to "vision_msgs" use:
 ```
@@ -64,6 +64,6 @@ roslaunch tiago_behaviour tiago_behaviour_tree.launch
 In case you want to drive the robot, in the third window, run
 
 ```
-rosrun key_teleop key_teleop.py
+rosrun key_teleop key_teleop.py -->
 ```
 

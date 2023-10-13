@@ -21,23 +21,45 @@ The pipeline is shown as follow:
 
 #### **Simulation environment**
 
-The only supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation. For non-melodic version, please use the docker image by following the instruction on [TIAGo Docker turtorial](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). Please select the melodic version when pulling the image.
+The only supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation. For non-melodic version, we have provided a docker file to build the image. Or you can use the docker image by following the instruction on [TIAGo Docker turtorial](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). Please select the melodic version when pulling the image.
 
 ## Installation
 
 The simulation is built upon the [Tiago Simulation repository](https://github.com/pal-robotics/tiago_tutorials.git). You can follow the instruction to install and add then the code from this repo. Alternatively, we have also provided the docker file for convenience.
 
-### Installation with Docker
+### Installation with Docker 
 >Note: Approximately 6GB of space is needed under /var. 
 First clone this repo and build the docker image.
 
 ``` bash
 git clone git@github.com:LiuStan99/TIAGo-Robot-Perception.git
 cd TIAGo-Robot-Perception
-
+docker build -t tiago_simulation:melodic .
 ```
 
-### Installation steps
+Then install rocker following the instructions on the [tutorial website](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). **Do not pull the image again since we have already built the image (so skip the first command "docker pull ...").**
+
+After rocker is installed, run the container with the following command
+``` bash
+rocker --home --user --nvidia --x11 --privileged tiago_simulation:melodic
+```
+For rocker with intel integrated graphics support: 
+``` bash
+rocker --home --user --x11 --privileged tiago_simulation:melodic --devices /dev/dri/card0
+```
+If you are using a version of rocker that is lower than version 0.2.4, you would need to remove the --privileged option
+
+Once you are inside the rocker you can do 
+``` bash
+terminator -u
+```
+Finally build the packages
+``` bash
+cd /tiago_public_ws/
+sudo catkin build && source devel/setup.bash
+```
+
+### Installation steps (only for melodic version)
 Please first intall the simulation environment (melodic version) following the [instruction](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/InstallUbuntuAndROS). 
 
 ![](imgs/melodic.png)
@@ -62,25 +84,37 @@ catkin build && source devel/setup.bash
 
 
 ### Test perception nodes
-
-```
+1.Activate simulation environment
+```bash
+cd /tiago_public_ws && source devel/setup.bash
 roslaunch tiago_2dnav_gazebo tiago_mapping.launch public_sim:=true world:=simple_office_with_people
 ```
+2.Activate perception nodes
 
-To activate perception nodes, run
+Open another terminal and run
 ```
+source devel/setup.bash
 roslaunch person_detector detector.launch
 ```
+3.Visualization
 
-To visualize, in the second window, run
+To visualize, in the third window, run
 
 ```
+source devel/setup.bash
 rosrun rqt_image_view rqt_image_view
 ```
+You should be able to see 2D Bbox on human. 
 
-In case you want to drive the robot, in the third window, run
+**To see a 3D Bbox, add a MarkerArray in the rviz.**
+![](imgs/visualization.png)
+
+4.Move robot around
+
+In case you want to drive the robot, in the fourth window, run
 
 ```
+source devel/setup.bash
 rosrun key_teleop key_teleop.py
 ```
 
