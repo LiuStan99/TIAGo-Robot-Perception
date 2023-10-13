@@ -10,70 +10,62 @@
 Perception nodes are responsible for detecting and localizing objects from environment. Instead of using the existed packages which could not perform 3D localization, we have rewritten the perception nodes only based on some existed functions from OpenCV and PCL, so that human can directly be detected and localized in 3D world.
 
 There are two sub-nodes for perception:
-* pcl_obstacle_detector
-* person_detector
+* **pcl_obstacle_detector**: detecting obstacles using pointclouds from depth camera and outputing 3D bounding boxes.
+* **person_detector**: uses the camera and detected obstacles to classify human beings. It outputs the bounding boxes and pose array as output.
 
 The pipeline is shown as follow:
-![](pipeline_percep.png)
-
-The **pcl_obstacle detector** package detects obstacles using pointclouds from depth camera. The **person_detector** uses the camera and detected obstacles to classify human beings. It outputs the bounding boxes and pose array as output.
+![](imgs/pipeline_percep.png)
+ 
 
 **For detailed information, please refer to the readme file under person_detector and pcl_obstacle_detector folder.**
 
 #### **Simulation environment**
 
-The simulation is built upon the Tiago Simulation repository (from MDP project) which aims to be a simple one stop shop for simulating Tiago. All dependencies with their exact remote and version are listed in the `.rosinstall`. Using this it is possible to install locally. 
-
-**Important:** The only officially supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation. For non-melodic version, please use the docker image by following the instruction on [TIAGo Docker turtorial](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). Please select the melodic version when pulling the image.
+The only supported Ubuntu/ROS version is Bionic/Melodic for the Tiago simulation. For non-melodic version, please use the docker image by following the instruction on [TIAGo Docker turtorial](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/Installing_Tiago_tutorial_docker). Please select the melodic version when pulling the image.
 
 ## Installation
 
-Create a catkin workspace and clone all required dependencies listed in `cor_mdp_tiago.rosinstall`. To automate the process [vcstool](http://wiki.ros.org/vcstool) can be used:
+The simulation is built upon the [Tiago Simulation repository](https://github.com/pal-robotics/tiago_tutorials.git). You can follow the instruction to install and add then the code from this repo. Alternatively, we have also provided the docker file for convenience.
+
+### Installation with Docker
+>Note: Approximately 6GB of space is needed under /var. 
+First clone this repo and build the docker image.
 
 ``` bash
-cd <my_catkin_ws>/src
-vcs import --input TIAGo-Robot-Perception/cor_mdp_tiago.rosinstall .
+git clone git@github.com:LiuStan99/TIAGo-Robot-Perception.git
+cd TIAGo-Robot-Perception
+
+```
+
+### Installation steps
+Please first intall the simulation environment (melodic version) following the [instruction](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/InstallUbuntuAndROS). 
+
+![](imgs/melodic.png)
+
+After installation, clone this repo to the **/src** dir under your worksapce.
+``` bash
+cd ~/tiago_public_ws ## Path to your workspace
+cd src
+git clone git@github.com:LiuStan99/TIAGo-Robot-Perception.git
 cd ..
 ```
-
-
-Next, use rosdep to install other dependencies:
-``` bash
-sudo rosdep init
-rosdep update
-rosdep install --from-paths src --ignore-src --rosdistro melodic -y --skip-keys="opencv2 opencv2-nonfree pal_laser_filters speed_limit_node sensor_to_cloud hokuyo_node libdw-dev python-graphitesend-pip python-statsd pal_filters pal_vo_server pal_usb_utils pal_pcl pal_pcl_points_throttle_and_filter pal_karto pal_local_joint_control camera_calibration_files pal_startup_msgs pal-orbbec-openni2 dummy_actuators_manager pal_local_planner gravity_compensation_controller current_limit_controller dynamic_footprint dynamixel_cpp tf_lookup opencv3 joint_impedance_trajectory_controller" 
-```
-> Note: the skip-keys contain non-essential dependencies and are taken from the official [PAL install instructions](http://wiki.ros.org/Robots/TIAGo%2B%2B/Tutorials/Installation/InstallUbuntuAndROS)
-
 Finally build and source the workspace:
 ``` bash
 catkin build && source devel/setup.bash
 ```
 
-> Note: if errors occur during 'catkin build' related to "vision_msgs", please use the following command in the catkin_ws/src/ directory:
-```
-cd <my_catkin_ws>/src
-git clone https://github.com/ros-perception/vision_msgs.git
-cd vision_msgs
-git checkout melodic-devel
-cd ../..
-```
 
-Then rebuild and source the workspace.
+
 
 
 ## Quickstart
 
 
-### Test simulation environment
-
-```
-roslaunch cor_mdp_tiago_gazebo tiago_festo.launch
-```
-
-![festo world image](festo_world.png)
-
 ### Test perception nodes
+
+```
+roslaunch tiago_2dnav_gazebo tiago_mapping.launch public_sim:=true world:=simple_office_with_people
+```
 
 To activate perception nodes, run
 ```
