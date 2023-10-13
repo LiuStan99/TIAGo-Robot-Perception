@@ -59,7 +59,7 @@ cd /tiago_public_ws/
 sudo catkin build && source devel/setup.bash
 ```
 
-### Installation steps (only for melodic version)
+### Installation steps without Docker(only for melodic version)
 Please first intall the simulation environment (melodic version) following the [instruction](http://wiki.ros.org/Robots/TIAGo/Tutorials/Installation/InstallUbuntuAndROS). 
 
 ![](imgs/melodic.png)
